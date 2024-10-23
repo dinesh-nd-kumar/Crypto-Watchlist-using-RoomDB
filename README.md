@@ -1,8 +1,8 @@
 Crypto-Watchlist-using-RoomDB
 
 MVVM (Model-View-ViewModel) architecture pattern implemented
+Dowload apk here  [app-debug.apk.zip](https://github.com/user-attachments/files/17497796/app-debug.apk.zip)
 
-Dowload apk here [Crypto watchlist.zip](https://github.com/user-attachments/files/17491312/Crypto.watchlist.zip)
 
 -> All the required data and icons are in resource once install and open the app it will move to local room storage.
 -> To add the item to the favorite long press the item and click yes.
