@@ -24,12 +24,8 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/taplayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white"
-        app:tabIndicatorGravity="stretch"
-        app:tabIndicatorFullWidth="true"
-        app:tabIndicatorAnimationMode="elastic"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

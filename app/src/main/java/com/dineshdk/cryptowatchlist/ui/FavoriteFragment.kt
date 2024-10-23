@@ -1,4 +1,4 @@
-package com.dineshdk.cryptowatchlist
+package com.dineshdk.cryptowatchlist.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,16 +8,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.dineshdk.cryptowatchlist.databinding.FragmentBlank1Binding
+import com.dineshdk.cryptowatchlist.ui.adapter.CurrencyListAdapter
+import com.dineshdk.cryptowatchlist.databinding.FragmentFavoriteBinding
 import com.dineshdk.cryptowatchlist.model.Currency
 import com.dineshdk.cryptowatchlist.model.WatchListViewModel
 
 
+class FavoriteFragment : Fragment(), CurrencyListAdapter.ItemClickListener {
 
-class BlankFragment1 : Fragment(), CurrencyListAdapter.ItemClickListener {
-
-
-    private var _binding: FragmentBlank1Binding? = null
+    private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
 
     private var watchlistViewModel: WatchListViewModel? = null
@@ -29,7 +28,7 @@ class BlankFragment1 : Fragment(), CurrencyListAdapter.ItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentBlank1Binding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,8 +38,7 @@ class BlankFragment1 : Fragment(), CurrencyListAdapter.ItemClickListener {
         initRecycler()
 
         watchlistViewModel = ViewModelProvider(requireActivity()).get(WatchListViewModel::class.java)
-        watchlistViewModel!!.loadData(requireContext())
-        watchlistViewModel!!.getProductLiveData().observe(viewLifecycleOwner){
+        watchlistViewModel!!.getAllFavoriteCurrencyLiveData().observe(viewLifecycleOwner){
             setRecycler(it)
 
         }
@@ -53,7 +51,7 @@ class BlankFragment1 : Fragment(), CurrencyListAdapter.ItemClickListener {
 
     private fun initRecycler(){
         binding.rvCurrencies.apply {
-            currencyAdapter = CurrencyListAdapter(this@BlankFragment1,null)
+            currencyAdapter = CurrencyListAdapter(this@FavoriteFragment,null)
             adapter = currencyAdapter
             addItemDecoration(
                 DividerItemDecoration(
@@ -64,24 +62,24 @@ class BlankFragment1 : Fragment(), CurrencyListAdapter.ItemClickListener {
         }
     }
 
+
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BlankFragment1.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            BlankFragment1().apply {
+            FavoriteFragment().apply {
 
             }
     }
 
     override fun onItemClick(p: Currency) {
-        Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show()
+    }
+
+
+    override fun onItemLongClick(c: Currency) {
+//        Toast.makeText(requireContext(), "long", Toast.LENGTH_SHORT).show()
+
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dineshdk.cryptowatchlist.model.Currency
 import com.dineshdk.cryptowatchlist.repo.CurrencyRepo
 import kotlinx.coroutines.launch
 
@@ -21,8 +20,25 @@ class WatchListViewModel:ViewModel() {
     }
 
 
+    fun getINRCurrencyLiveData() : LiveData<List<Currency>> {
+        return repo.getINRData()
+    }
 
-    fun getProductLiveData() : LiveData<List<Currency>> {
-        return repo.getData()
+    fun getUSDTCurrencyLiveData() : LiveData<List<Currency>> {
+        return repo.getUSDTData()
+    }
+
+    fun getUPROCurrencyLiveData() : LiveData<List<Currency>> {
+        return repo.getUPROData()
+    }
+
+    fun getAllFavoriteCurrencyLiveData() : LiveData<List<Currency>> {
+        return repo.getAllFavoriteCurrency()
+    }
+
+    fun updateCurrencyToFavorite(c:Currency)  {
+        viewModelScope.launch {
+            repo.updateCurrency(c)
+        }
     }
 }
