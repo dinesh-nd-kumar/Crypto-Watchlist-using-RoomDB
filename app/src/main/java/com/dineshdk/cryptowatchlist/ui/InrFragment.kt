@@ -16,7 +16,7 @@ import com.dineshdk.cryptowatchlist.model.WatchListViewModel
 
 
 
-class InrFragment : Fragment(), CurrencyListAdapter.ItemClickListener {
+class InrFragment : CurrencyListFragment(), CurrencyListAdapter.ItemClickListener {
 
 
     private var _binding: FragmentBlank1Binding? = null
@@ -78,22 +78,10 @@ class InrFragment : Fragment(), CurrencyListAdapter.ItemClickListener {
     }
 
     override fun onItemLongClick(c: Currency) {
-        val builder = AlertDialog.Builder(requireContext()).apply {
-            setTitle(c.name)
-            setIcon(c.imagePath)
-            setMessage("Are you want add ${c.name} to favorite?")
-            setPositiveButton("Yes") { dialog, which ->
-                c.isFavorite = true
-                watchlistViewModel!!.updateCurrencyToFavorite(c)
-            }
-            setNegativeButton("Cancel") { dialog, which ->
-
-            }
+        super.showAddToFavoriteDialog(c){
+            c.isFavorite = true
+            watchlistViewModel!!.updateCurrencyToFavorite(c)
         }
-
-
-        val dialog = builder.create()
-        dialog.show()
 
     }
 }

@@ -14,21 +14,11 @@ class CurrencyRepo {
 
     var context: Context? = null
 
-
-
     suspend fun loadData(context: Context) {
         this.context = context
         getAllCurrenciesFromRoom()
-        inrCurrencyLiveData.postValue( getAllINRFromRoom())
-        usdtCurrencyLiveData.postValue( getAllUSDTFromRoom())
-        uproCurrencyLiveData.postValue( getAllUPROFromRoom())
-        favoriteCurrencyLiveData.postValue(getFavFromRoom())
 
-
-//        fetchProducts()
     }
-
-
 
     fun getINRData(): MutableLiveData<List<Currency>> {
         return inrCurrencyLiveData
@@ -44,13 +34,23 @@ class CurrencyRepo {
     }
     suspend fun updateCurrency(c: Currency){
         updateCurrencyToFavInRoom(c)
-        favoriteCurrencyLiveData.postValue(getFavFromRoom())
+
+        getAllCurrenciesFromRoom()
     }
 
 
+    private suspend fun updateCurrencyToFavInRoom(c :Currency) {
+        DatabaseBuilder.run {
+            context?.let {
+                getInstance(it).productDao().updateCurrency(c)
+
+            }
+        }
+
+    }
 
 
-    private suspend fun getAllCurrenciesFromRoom(): List<Currency>? {
+    private suspend fun getAllCurrenciesFromRoom(): List<Currency> {
 
 
         var listfromroom:List<Currency> = listOf()
@@ -66,11 +66,34 @@ class CurrencyRepo {
 
             }
         }
+
+        updateCurrencyLiveData(listfromroom)
+
         return listfromroom
 
 
     }
 
+    private suspend fun updateCurrencyLiveData(listFromRoom: List<Currency>) {
+        // Filter for INR type
+        val inrList = listFromRoom.filter { it.type == "INR" }
+        inrCurrencyLiveData.postValue(inrList)
+
+        // Filter for USDT type
+        val usdtList = listFromRoom.filter { it.type == "USDT" }
+        usdtCurrencyLiveData.postValue(usdtList)
+
+        // Filter for UPRO type
+        val uproList = listFromRoom.filter { it.type == "UPRO" }
+        uproCurrencyLiveData.postValue(uproList)
+
+        // Filter for favorite currencies
+        val favoriteList = listFromRoom.filter { it.isFavorite }
+        favoriteCurrencyLiveData.postValue(favoriteList)
+    }
+
+
+    @Deprecated("No Use Examine purpose only")
     private suspend fun getFavFromRoom(): List<Currency>? {
         var favListFromRoom:List<Currency> = listOf()
         DatabaseBuilder.run {
@@ -83,6 +106,7 @@ class CurrencyRepo {
 
     }
 
+    @Deprecated("No Use Examine purpose only")
     private suspend fun getAllINRFromRoom(): List<Currency>? {
         var list:List<Currency> = listOf()
         DatabaseBuilder.run {
@@ -95,6 +119,7 @@ class CurrencyRepo {
 
     }
 
+    @Deprecated("No Use Examine purpose only")
     private suspend fun getAllUSDTFromRoom(): List<Currency>? {
         var list:List<Currency> = listOf()
         DatabaseBuilder.run {
@@ -107,6 +132,7 @@ class CurrencyRepo {
 
     }
 
+    @Deprecated("No Use Examine purpose only")
     private suspend fun getAllUPROFromRoom(): List<Currency>? {
         var list:List<Currency> = listOf()
         DatabaseBuilder.run {
@@ -119,15 +145,7 @@ class CurrencyRepo {
 
     }
 
-     private suspend fun updateCurrencyToFavInRoom(c :Currency) {
-        DatabaseBuilder.run {
-            context?.let {
-                getInstance(it).productDao().updateCurrency(c)
 
-            }
-        }
-
-    }
 
 
     private fun getList() = listOf(

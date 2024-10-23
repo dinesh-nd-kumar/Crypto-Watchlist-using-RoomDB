@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,7 @@ import com.dineshdk.cryptowatchlist.model.Currency
 import com.dineshdk.cryptowatchlist.model.WatchListViewModel
 import com.dineshdk.cryptowatchlist.ui.adapter.CurrencyListAdapter
 
-class UproFragment : Fragment(), CurrencyListAdapter.ItemClickListener {
+class UproFragment : CurrencyListFragment(), CurrencyListAdapter.ItemClickListener {
 
     private var _binding: FragmentUsdtBinding? = null
     private val binding get() = _binding!!
@@ -75,22 +76,9 @@ class UproFragment : Fragment(), CurrencyListAdapter.ItemClickListener {
     }
 
     override fun onItemLongClick(c: Currency) {
-        val builder = AlertDialog.Builder(requireContext()).apply {
-            setTitle(c.name)
-            setIcon(c.imagePath)
-            setMessage("Are you want add ${c.name} to favorite?")
-            setPositiveButton("Yes") { dialog, which ->
-                c.isFavorite = true
-                watchlistViewModel!!.updateCurrencyToFavorite(c)
-            }
-            setNegativeButton("Cancel") { dialog, which ->
-
-            }
+        super.showAddToFavoriteDialog(c){
+            c.isFavorite = true
+            watchlistViewModel!!.updateCurrencyToFavorite(c)
         }
-
-
-        val dialog = builder.create()
-        dialog.show()
-
     }
 }

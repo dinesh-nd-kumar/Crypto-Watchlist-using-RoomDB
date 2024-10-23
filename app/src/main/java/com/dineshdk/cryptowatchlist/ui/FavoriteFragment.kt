@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dineshdk.cryptowatchlist.ui.adapter.CurrencyListAdapter
@@ -73,13 +74,46 @@ class FavoriteFragment : Fragment(), CurrencyListAdapter.ItemClickListener {
             }
     }
 
-    override fun onItemClick(p: Currency) {
-//        Toast.makeText(requireContext(), "clicked", Toast.LENGTH_SHORT).show()
+    override fun onItemClick(c: Currency) {
+        val builder = AlertDialog.Builder(requireContext()).apply {
+            setTitle(c.name)
+            setIcon(c.imagePath)
+            setMessage(" Name: ${c.name} \n Des: ${c.description}")
+            setPositiveButton("OK") { dialog, which ->
+
+            }
+
+        }
+
+
+        val dialog = builder.create()
+        dialog.show()
+
+
+
+
+
+
     }
 
 
     override fun onItemLongClick(c: Currency) {
-//        Toast.makeText(requireContext(), "long", Toast.LENGTH_SHORT).show()
+        val builder = AlertDialog.Builder(requireContext()).apply {
+            setTitle(c.name)
+            setIcon(c.imagePath)
+            setMessage("Are you want remove ${c.name} from favorite?")
+            setPositiveButton("Yes") { dialog, which ->
+                c.isFavorite = false
+                watchlistViewModel!!.updateCurrencyToFavorite(c)
+            }
+            setNegativeButton("Cancel") { dialog, which ->
+
+            }
+        }
+
+
+        val dialog = builder.create()
+        dialog.show()
 
     }
 }
